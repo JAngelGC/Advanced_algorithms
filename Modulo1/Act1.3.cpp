@@ -77,7 +77,7 @@ bool solveMaze(int x, int y, int M, int N, int **mtx, int **out)
     return false;
 }
 
-void solve(int M, int N, int **mtx)
+void solveByBactracking(int M, int N, int **mtx)
 {
 
     int **out = create2DArray(M, N);
@@ -118,7 +118,7 @@ int main()
         }
     }
 
-    solve(M, N, iniMtx);
+    solveByBactracking(M, N, iniMtx);
 
     return 0;
 }
