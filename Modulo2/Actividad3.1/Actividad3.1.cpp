@@ -1,3 +1,9 @@
+// Programa que resuelve un laberinto | Backtracking & Branch and bound
+// Carlos Daniel Diaz Arrazate - A01734902
+// Jose Angel Gonzalez Carrera - A01552274
+// Carlos Eduardo Ruiz Lira - A01735706
+// 25/09/2022
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,17 +26,19 @@ struct Node {
     void addChild(char letter) {
         Node* tmp = new Node(letter);
         children.push_back( tmp );
-        //cout << "Inserted value: " << children[children.size()-1]->value << endl;
     }
 
 };
 
+// Insert a letter in a tree
+// Time Complexity: O(n)
+// Input: Pointer to node, char
+// Output: Pointer to position of parent of char
 Node* insertLetter(Node* head, char letter) {
     Node* tmp = head;
 
     for(int i=0; i<tmp->children.size(); i++) {
         if (tmp->children[i]->value == letter) {
-            //tmp = tmp->children[i];
             return tmp->children[i];
         }
     }
@@ -38,6 +46,10 @@ Node* insertLetter(Node* head, char letter) {
     return head->children[head->children.size()-1];
 }
 
+// Insert a word in the tree
+// Time Complexity: O(n)
+// Input: Pointer to node, string
+// Output: None
 void insertWord(Node* head, string word) {
     Node* last = head;
     for(int i=0; i<word.length(); i++) {
@@ -47,6 +59,10 @@ void insertWord(Node* head, string word) {
 }
 
 
+// Search for a letter in tree
+// Time Complexity: O(n)
+// Input: Pointer to node, char
+// Output: Position of letter
 int searchLetter(Node* head, char letter) {
     for(int i=0; i<head->children.size(); i++) {
         if (head->children[i]->value == letter) {
@@ -56,12 +72,14 @@ int searchLetter(Node* head, char letter) {
     return -1;
 }
 
+// Search word in tree
+// Time Complexity: O(n)
+// Input: Pointer to node, string
+// Output: Bool
 bool searchWord(Node* head, string word) {
     int pos = 0;
-    //cout << endl;
     for(int i=0; i<word.length(); i++) {
         pos = searchLetter(head, word[i]);
-        //cout << head->children[pos]->value;
         if (pos >= 0) {
             head = head->children[pos];
         }
@@ -73,17 +91,15 @@ bool searchWord(Node* head, string word) {
 
 }
 
-
+// Depth first search
+// Time Complexity: O(n)
+// Input: Head of tree
+// Output: None
 void dfs(Node *head) {
-
-    //cout << head->value;
     cout << head->value << " ";
     for(int i=0; i<head->children.size(); i++) {
         dfs(head->children[i]);
-        //cout << endl;
     }
-    //cout << " ";
-
 }
 
 
@@ -97,6 +113,7 @@ int main() {
     string str;
     struct Node head = Node();
 
+    // Input words into tree
     cin >> n;
 
     for(int i=0; i<n; i++) {
@@ -105,13 +122,16 @@ int main() {
     }
     
 
-    cin >> n; 
+    // Search for words into tree
+    cin >> m; 
     cout << boolalpha;
-    for(int i=0; i<n; i++) {
+    for(int i=0; i<m; i++) {
         cin >> str;
         cout << searchWord(&head, str) << endl;
     }
     
+
+    // Print dfs of tree
     for(int i=0; i<head.children.size(); i++) {
         dfs(head.children[i]);
     }
