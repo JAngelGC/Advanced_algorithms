@@ -1,0 +1,16 @@
+10
+port
+por
+linux
+torrent
+tux
+upper
+atom
+vscode
+vim
+neovim
+4
+sublime
+notepad
+vscode
+vim

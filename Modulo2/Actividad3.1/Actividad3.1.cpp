@@ -58,7 +58,7 @@ int searchLetter(Node* head, char letter) {
 
 bool searchWord(Node* head, string word) {
     int pos = 0;
-    cout << endl;
+    //cout << endl;
     for(int i=0; i<word.length(); i++) {
         pos = searchLetter(head, word[i]);
         //cout << head->children[pos]->value;
@@ -93,32 +93,25 @@ void dfs(Node *head) {
 int main() {
 
     int n;
+    int m;
     string str;
     struct Node head = Node();
 
-    /*
     cin >> n;
 
     for(int i=0; i<n; i++) {
         cin >> str;
         insertWord(&head, str);
     }
-    */
+    
 
-    insertWord(&head, "that");
-    insertWord(&head, "this");
-    insertWord(&head, "these");
-    insertWord(&head, "those");
-    insertWord(&head, "tent");
-    insertWord(&head, "amy");
-
-
-    cout << "---Search---" << endl;
-    cout << boolalpha << searchWord(&head, "that");
-    cout << searchWord(&head, "this");
-
-    cout << endl << endl;
-    cout << "---BFS---" << endl;
+    cin >> n; 
+    cout << boolalpha;
+    for(int i=0; i<n; i++) {
+        cin >> str;
+        cout << searchWord(&head, str) << endl;
+    }
+    
     for(int i=0; i<head.children.size(); i++) {
         dfs(head.children[i]);
     }
