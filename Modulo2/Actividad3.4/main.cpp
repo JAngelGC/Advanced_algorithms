@@ -4,6 +4,10 @@
 
 using namespace std;
 
+// Get maximum value in a vector
+// Input: Vector
+// Output: Maximum value
+// Time Complexity: O(n)
 int getMax(vector<int> v) {
     int max = -1;
     for(int i=0; i<v.size(); i++) {
@@ -17,20 +21,27 @@ int getMax(vector<int> v) {
 // Assign a color to a node
 // Input: Node, Vector: Colors of each node, Vector: Colors of adjacent nodes
 // Output: None
-// Time Complexity
+// Time Complexity: O(n*m)
 void setColor(int node, vector<int>& nodeColor, vector<int>& adjColors) {
+    // Check used colors that arent used in adjacent nodes
     for(int i=0; i<nodeColor.size(); i++) {
+        // If a color is avaliable then give new node that color
         if (count(adjColors.begin(), adjColors.end(), nodeColor[i]) == 0) {
             cout << "Using color: " << nodeColor[i] << endl;
             nodeColor[node] = nodeColor[i];
             return;
         }
     }
+    // All colors collide, create a new color
     cout << "New color: " << getMax(nodeColor)+1 << endl;
     nodeColor[node] = getMax(nodeColor)+1;
     return;
 }
 
+// Prints all nodes in a vector
+// Input: Vector
+// Output: None
+// Time Complexity: O(n)
 void printNodes(vector<int>& nodeColor) {
     //cout << endl << "--- Nodes Colors ---" << endl;
     for(int i=0; i<nodeColor.size(); i++) {
@@ -39,10 +50,16 @@ void printNodes(vector<int>& nodeColor) {
     cout << endl;
 }
 
+// Assign colors to a graph without repetitions in adjacent nodes
+// Input: Adjacency matrix
+// Output: None
+// Time Complexity: O(n)
 void graphColor(vector<vector<int>> G) {
+
+    // Vector that stores the color of each node
     vector<int> nodeColor(G[0].size(), -1);
 
-    // First node has first color
+    // First node has the first color
     nodeColor[0] = 0;
 
     // Check colors of each adjacent node of each node
@@ -55,6 +72,7 @@ void graphColor(vector<vector<int>> G) {
                 adjColors.push_back(nodeColor[j]);
             }
         }
+
         // Give new node a color
         setColor(i, nodeColor, adjColors);
         // Print color of each node
@@ -62,6 +80,7 @@ void graphColor(vector<vector<int>> G) {
         cout << endl;
     }
 }
+
 
 int main() {
 
