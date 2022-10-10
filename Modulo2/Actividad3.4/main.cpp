@@ -27,13 +27,13 @@ void setColor(int node, vector<int>& nodeColor, vector<int>& adjColors) {
     for(int i=0; i<nodeColor.size(); i++) {
         // If a color is avaliable then give new node that color
         if (count(adjColors.begin(), adjColors.end(), nodeColor[i]) == 0) {
-            cout << "Using color: " << nodeColor[i] << endl;
+            //cout << "Using color: " << nodeColor[i] << endl;
             nodeColor[node] = nodeColor[i];
             return;
         }
     }
     // All colors collide, create a new color
-    cout << "New color: " << getMax(nodeColor)+1 << endl;
+    //cout << "New color: " << getMax(nodeColor)+1 << endl;
     nodeColor[node] = getMax(nodeColor)+1;
     return;
 }
@@ -45,9 +45,8 @@ void setColor(int node, vector<int>& nodeColor, vector<int>& adjColors) {
 void printNodes(vector<int>& nodeColor) {
     //cout << endl << "--- Nodes Colors ---" << endl;
     for(int i=0; i<nodeColor.size(); i++) {
-        cout << nodeColor[i] << " ";
+        cout << "Node: " << i << ", Assigned Color: " << nodeColor[i] << endl;
     }
-    cout << endl;
 }
 
 // Assign colors to a graph without repetitions in adjacent nodes
@@ -64,7 +63,7 @@ void graphColor(vector<vector<int>> G) {
 
     // Check colors of each adjacent node of each node
     for(int i=1; i<G[0].size(); i++) {
-        cout << "---SET NODE: " << i << "---" << endl;
+        //cout << "---SET NODE: " << i << "---" << endl;
         vector<int> adjColors;
         for(int j=0; j<G[0].size(); j++) {
             if (G[i][j]) {
@@ -76,36 +75,27 @@ void graphColor(vector<vector<int>> G) {
         // Give new node a color
         setColor(i, nodeColor, adjColors);
         // Print color of each node
-        printNodes(nodeColor);
-        cout << endl;
     }
+    printNodes(nodeColor);
+    cout << endl;
 }
 
 
 int main() {
 
 
-    /*
-    int n = 6;
-    vector<vector<int>> G = {
-     { 0, 1, 1, 0, 1, 0 },
-     { 1, 0, 1, 1, 0, 1 },
-     { 1, 1, 0, 1, 1, 0 },
-     { 0, 1, 1, 0, 0, 1 },
-     { 1, 0, 1, 0, 0, 1 },
-     { 0, 1, 0, 1, 1, 0 }
-    };
-    */
-
-    int n = 5;
-    vector<vector<int>> G = {
-        { 0, 0, 1, 0, 1 },
-        { 0, 0, 1, 1, 1 },
-        { 1, 1, 0, 1, 0 },
-        { 0, 1, 1, 0, 1 },
-        { 1, 1, 0, 1, 0 }
-    };
-
+    int n;
+    int tmp;
+    vector<vector<int>> G;
+    cin >> n;
+    for(int i=0; i<n; i++) {
+        vector<int> row;
+        for(int j=0; j<n; j++) {
+            cin >> tmp;
+            row.push_back(tmp);
+        }
+        G.push_back(row);
+    }
 
     graphColor(G);
 
