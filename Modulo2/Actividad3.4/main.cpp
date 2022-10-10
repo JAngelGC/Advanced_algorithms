@@ -18,36 +18,38 @@ int getMax(vector<int> v) {
     return max;
 }
 
+
 // Assign a color to a node
 // Input: Node, Vector: Colors of each node, Vector: Colors of adjacent nodes
 // Output: None
 // Time Complexity: O(n*m)
 void setColor(int node, vector<int>& nodeColor, vector<int>& adjColors) {
-    // Check used colors that arent used in adjacent nodes
+    // Check used colors that arent present in adjacent nodes
     for(int i=0; i<nodeColor.size(); i++) {
         // If a color is avaliable then give new node that color
-        if (count(adjColors.begin(), adjColors.end(), nodeColor[i]) == 0) {
+        if (count(adjColors.begin(), adjColors.end(), nodeColor[i]) == 0 && nodeColor[i] >= 0) {
             //cout << "Using color: " << nodeColor[i] << endl;
             nodeColor[node] = nodeColor[i];
             return;
         }
     }
-    // All colors collide, create a new color
-    //cout << "New color: " << getMax(nodeColor)+1 << endl;
+    // If all colors collide then create a new color
+    // cout << "New color: " << getMax(nodeColor)+1 << endl;
     nodeColor[node] = getMax(nodeColor)+1;
     return;
 }
+
 
 // Prints all nodes in a vector
 // Input: Vector
 // Output: None
 // Time Complexity: O(n)
 void printNodes(vector<int>& nodeColor) {
-    //cout << endl << "--- Nodes Colors ---" << endl;
     for(int i=0; i<nodeColor.size(); i++) {
         cout << "Node: " << i << ", Assigned Color: " << nodeColor[i] << endl;
     }
 }
+
 
 // Assign colors to a graph without repetitions in adjacent nodes
 // Input: Adjacency matrix
@@ -76,18 +78,31 @@ void graphColor(vector<vector<int>> G) {
         setColor(i, nodeColor, adjColors);
         // Print color of each node
     }
-    printNodes(nodeColor);
-    cout << endl;
+
+    // If number of colors is the same as the number of nodes
+    if(getMax(nodeColor) == G[0].size()-1) {
+        cout << "No es posible asignar colores a los nodos" << endl;
+        return;
+    }
+
+    // At least 2 nodes have the same color
+    else {
+        printNodes(nodeColor);
+        return;
+    }
 }
 
 
 int main() {
 
-
     int n;
     int tmp;
     vector<vector<int>> G;
+
+    // Input size of matrix
     cin >> n;
+
+    // Insert adjacency matrix
     for(int i=0; i<n; i++) {
         vector<int> row;
         for(int j=0; j<n; j++) {
@@ -97,6 +112,7 @@ int main() {
         G.push_back(row);
     }
 
+    // Colorize the graph
     graphColor(G);
 
 
