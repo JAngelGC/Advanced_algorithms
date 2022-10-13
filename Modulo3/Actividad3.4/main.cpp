@@ -1,8 +1,16 @@
+// Program that assigns a color to each node of a graph where no adjacent nodes share the same color
+// Carlos Daniel Diaz Arrazate - A01734902
+// Jose Angel Gonzalez Carrera - A01552274
+// Carlos Eduardo Ruiz Lira - A01735706
+// 12/10/2022
+
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
 using namespace std;
+
 
 // Get maximum value in a vector
 // Input: Vector
