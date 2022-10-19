@@ -18,7 +18,7 @@ void tsp(vector<vector<int>> graph)
     }
 
     int curNode = 0;
-    int nextNode;
+    int nextNode = 1;
     vector<int> bestPath;
     bestPath.push_back(curNode + 1);
     nodesVisited[curNode] = true;
@@ -27,9 +27,9 @@ void tsp(vector<vector<int>> graph)
     while (counter < sizeGraph - 1)
     {
         int bestNextNode = numeric_limits<int>::max();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < sizeGraph; i++)
         {
-            if (curNode != i && graph[curNode][i] < bestNextNode && nodesVisited[i] == false)
+            if ((curNode != i) && (graph[curNode][i] < bestNextNode) && (nodesVisited[i] == false))
             {
                 bestNextNode = graph[curNode][i];
                 nextNode = i;

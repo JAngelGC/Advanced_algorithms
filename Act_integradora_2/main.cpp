@@ -56,16 +56,21 @@ void closestCentral(vector<Point> centrals, Point point)
     // return closestNode;
 }
 
-void maxDataFlow(int &maxData,int currentNode, int lastNode, int currentMaxFlow, unordered_set<int> &visited,vector<vector<int>> &weights, unordered_map<int, vector<int>> &adjlist) {
+void maxDataFlow(int &maxData, int currentNode, int lastNode, int currentMaxFlow, unordered_set<int> &visited, vector<vector<int>> &weights, unordered_map<int, vector<int>> &adjlist)
+{
     visited.insert(currentNode);
     if (currentNode == lastNode)
     {
-        maxData = max(maxData,currentMaxFlow);
-    } else {
-        for (int neighbour : adjlist.at(currentNode)) {
-            if(visited.find(neighbour) == visited.end()){
-                int newMaxFlow = min(currentMaxFlow,weights[currentNode][neighbour]);
-                maxDataFlow(maxData,neighbour,lastNode,newMaxFlow,visited,weights,adjlist);
+        maxData = max(maxData, currentMaxFlow);
+    }
+    else
+    {
+        for (int neighbour : adjlist.at(currentNode))
+        {
+            if (visited.find(neighbour) == visited.end())
+            {
+                int newMaxFlow = min(currentMaxFlow, weights[currentNode][neighbour]);
+                maxDataFlow(maxData, neighbour, lastNode, newMaxFlow, visited, weights, adjlist);
             }
         }
     }
@@ -95,13 +100,14 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
-        
+
         vector<int> row;
         for (int j = 0; j < n; j++)
         {
             int w;
             cin >> w;
-            if (i != j and w != 0) adjlist[i].push_back(j);
+            if (i != j and w != 0)
+                adjlist[i].push_back(j);
 
             row.push_back(w);
         }
@@ -110,22 +116,55 @@ int main()
 
     int maxData = 0;
     unordered_set<int> visited;
-    maxDataFlow(maxData,0,n-1,INT_MAX,visited,weights,adjlist);
+    maxDataFlow(maxData, 0, n - 1, INT_MAX, visited, weights, adjlist);
 
     cout << maxData << endl;
 
-    vector<Point> centrals;
+    // Cemtral mas cercana a nuevos nodos
+    string str;
+    int x, y;
+    char sep;
     int numberCentrals;
+    vector<Point> centrals;
+    vector<Point> newCentrals;
 
+    // Ubicacion de centrales
+    cin >> numberCentrals;
     for (int i = 0; i < numberCentrals; i++)
     {
-        cout << "";
+        cin >> str;
+        str = str.substr(1, str.size() - 2);
+        stringstream ss(str);
+        ss >> x;
+        ss >> sep;
+        ss >> y;
+        centrals.push_back(Point(x, y));
     }
 
-    centrals.push_back(Point(200, 500));
-    centrals.push_back(Point(300, 100));
-    centrals.push_back(Point(450, 150));
-    centrals.push_back(Point(520, 480));
+    // Nuevas centrales
+    cin >> numberCentrals;
+    for (int i = 0; i < numberCentrals; i++)
+    {
+        cin >> str;
+        str = str.substr(1, str.size() - 2);
+        stringstream ss(str);
+        ss >> x;
+        ss >> sep;
+        ss >> y;
+        newCentrals.push_back(Point(x, y));
+    }
 
-    return 0;
+    // Calcular central mas cercana para cada nodo
+    for (int i = 0; i < newCentrals.size(); i++)
+    {
+        closestCentral(centrals, newCentrals[i]);
+    }
+
+    // centrals.push_back(Point(200, 500));
+    // centrals.push_back(Point(300, 100));
+    // centrals.push_back(Point(450, 150));
+    // centrals.push_back(Point(520, 480));
+
+    // 0,0
+    // 400,400
 }
