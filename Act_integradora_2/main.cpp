@@ -4,7 +4,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
-#include <stack>
+#include <limits.h>
 
 using namespace std;
 
@@ -51,58 +51,25 @@ void closestCentral(vector<Point> centrals, Point point)
             minDistance = newDistance;
         }
     }
+
     cout << "Closest node: " << closestNode << " with values: " << centrals[closestNode].x << ", " << centrals[closestNode].y << endl;
     // return closestNode;
 }
 
-int maxDataFlow(unordered_map<int, vector<int>> &adjlist, unordered_map<pair<int, int>, int> &weights, int firstNode, int lastNode)
-{
-
-    int maxDataFlow = 0;
-
-    for (int node : adjlist.at(firstNode))
+void maxDataFlow(int &maxData,int currentNode, int lastNode, int currentMaxFlow, unordered_set<int> &visited,vector<vector<int>> &weights, unordered_map<int, vector<int>> &adjlist) {
+    visited.insert(currentNode);
+    if (currentNode == lastNode)
     {
-
-        if (node == lastNode)
-        {
-            maxDataFlow = max(maxDataFlow, weights.find(make_pair(firstNode, node)));
-            continue;
-        }
-
-        unordered_set<int> visited;
-
-        visited.insert(firstNode);
-        visited.insert(node);
-
-        stack<pair<int, int>> s;
-        s.push(make_pair(node, weights.find(make_pair(firstNode, node))));
-
-        while (!s.empty())
-        {
-            int currentNode = mystack.top().first;
-            int currMaxFlow = mystack.top().second;
-
-            if (currentNode == lastNode)
-            {
-                maxDataFlow = max(maxDataFlow, currMaxFlow);
-                break;
-            }
-
-            for (int neighbour : adjlist.at(currentNode))
-            {
-
-                if (visited.find(neighbour) != visited.end())
-                {
-                    visited.insert(neighbour);
-
-                    int newMaxFlow = min(currMaxFlow, weights.find(currentNode, neighbour));
-                    s.push(make_pair(neighbour, newMaxFlow));
-                }
+        maxData = max(maxData,currentMaxFlow);
+    } else {
+        for (int neighbour : adjlist.at(currentNode)) {
+            if(visited.find(neighbour) == visited.end()){
+                int newMaxFlow = min(currentMaxFlow,weights[currentNode][neighbour]);
+                maxDataFlow(maxData,neighbour,lastNode,newMaxFlow,visited,weights,adjlist);
             }
         }
     }
-
-    return maxDataFlow;
+    visited.erase(currentNode);
 }
 
 int main()
@@ -111,9 +78,8 @@ int main()
     cin >> n;
 
     vector<vector<int>> graph;
-    unordered_map<pair<int, int>, int> weights
-        unordered_map<int, vector<int>>
-            adjlist;
+    vector<vector<int>> weights;
+    unordered_map<int, vector<int>> adjlist;
 
     for (int i = 0; i < n; i++)
     {
@@ -129,22 +95,24 @@ int main()
 
     for (int i = 0; i < n; i++)
     {
+        
+        vector<int> row;
         for (int j = 0; j < n; j++)
         {
             int w;
             cin >> w;
+            if (i != j and w != 0) adjlist[i].push_back(j);
 
-            if (i != j and w != 0)
-            {
-
-                pair<int, int> edge(i, j);
-                weights[edge] = w;
-                adjlist[i].push_back[j];
-            }
+            row.push_back(w);
         }
+        weights.push_back(row);
     }
 
-    int maxDataFlow = maxDataFlow(adjlist, weights, 0, n - 1);
+    int maxData = 0;
+    unordered_set<int> visited;
+    maxDataFlow(maxData,0,n-1,INT_MAX,visited,weights,adjlist);
+
+    cout << maxData << endl;
 
     vector<Point> centrals;
     int numberCentrals;
@@ -158,4 +126,6 @@ int main()
     centrals.push_back(Point(300, 100));
     centrals.push_back(Point(450, 150));
     centrals.push_back(Point(520, 480));
+
+    return 0;
 }
