@@ -160,11 +160,6 @@ int main()
         closestCentral(centrals, newCentrals[i]);
     }
 
-    // centrals.push_back(Point(200, 500));
-    // centrals.push_back(Point(300, 100));
-    // centrals.push_back(Point(450, 150));
-    // centrals.push_back(Point(520, 480));
-
     // 0,0
     // 400,400
 }
