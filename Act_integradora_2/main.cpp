@@ -5,6 +5,11 @@
 #include <algorithm>
 #include <cmath>
 #include <limits.h>
+#include <iterator>
+#include <map>
+#include <limits>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -52,15 +57,138 @@ void closestCentral(vector<Point> centrals, Point point)
         }
     }
 
-    cout << "Closest node: " << closestNode << " with values: " << centrals[closestNode].x << ", " << centrals[closestNode].y << endl;
-    // return closestNode;
+    cout << closestNode << endl;
 }
 
+// Shortest possible route to connect all neighborhoods
+// Input: (list) adjecency list of neighborhoods
+// Output: Shortest possible route that visits each neighborhoods exactly once
+// Time Complexity: O(V^2)
+void tspCable(vector<vector<int>> graph)
+{
+    int sizeGraph = graph.size();
+
+    // Initialize nodesVisited
+    map<int, bool> nodesVisited;
+    for (int i = 0; i < sizeGraph; i++)
+        nodesVisited[i] = false;
+
+    int curNode = 0;
+    int nextNode = 1;
+
+    vector<vector<int>> bestPath;
+    nodesVisited[curNode] = true;
+
+    int counter = 0;
+    while (counter < sizeGraph - 1)
+    {
+        int bestNextNode = numeric_limits<int>::max();
+        for (int i = 0; i < sizeGraph; i++)
+        {
+            // check for the cheapest neighborhood
+            if ((curNode != i) && (graph[curNode][i] < bestNextNode) && (nodesVisited[i] == false))
+            {
+                bestNextNode = graph[curNode][i];
+                nextNode = i;
+            }
+        }
+
+        // push that neighborhood to the best path and mark it as visited
+        vector<int> edge;
+        edge.push_back(curNode + 1);
+        edge.push_back(nextNode + 1);
+        bestPath.push_back(edge);
+
+        nodesVisited[nextNode] = true;
+        curNode = nextNode;
+        counter++;
+    }
+
+    // from the last node, return back to the
+
+    // printing shortest path
+    for (int i = 0; i < sizeGraph - 1; i++)
+    {
+        cout << "(" << bestPath[i][0] << ", " << bestPath[i][1] << ")";
+    }
+
+    cout << endl;
+}
+
+// Shortest possible route
+// Input: (list) adjecency list of neighborhoods
+// Output: Shortest possible route that visits each neighborhoods exactly once and returns to the start
+// Time Complexity: O(V^2)
+void tsp(vector<vector<int>> graph)
+{
+    map<int, string> myMap;
+    myMap[1] = "A";
+    myMap[2] = "B";
+    myMap[3] = "C";
+    myMap[4] = "D";
+    myMap[5] = "E";
+    myMap[6] = "F";
+    myMap[7] = "G";
+    myMap[8] = "H";
+    myMap[9] = "I";
+    myMap[10] = "J";
+
+    int sizeGraph = graph.size();
+
+    // Initialize nodesVisited
+    map<int, bool> nodesVisited;
+    for (int i = 0; i < sizeGraph; i++)
+        nodesVisited[i] = false;
+
+    int curNode = 0;
+    int nextNode = 1;
+
+    vector<int> bestPath;
+    bestPath.push_back(curNode + 1);
+    nodesVisited[curNode] = true;
+
+    int counter = 0;
+    while (counter < sizeGraph - 1)
+    {
+        int bestNextNode = numeric_limits<int>::max();
+        for (int i = 0; i < sizeGraph; i++)
+        {
+            // check for the cheapest neighborhood
+            if ((curNode != i) && (graph[curNode][i] < bestNextNode) && (nodesVisited[i] == false))
+            {
+                bestNextNode = graph[curNode][i];
+                nextNode = i;
+            }
+        }
+
+        // push that neighborhood to the best path and mark it as visited
+        bestPath.push_back(nextNode + 1);
+        nodesVisited[nextNode] = true;
+        curNode = nextNode;
+        counter++;
+    }
+
+    // from the last node, return back to the
+    bestPath.push_back(0 + 1);
+
+    // printing shortest path
+    for (auto x : bestPath)
+        cout << myMap[x] << " -> ";
+    cout << endl;
+}
+
+// Get max data flow from any two neigborhoods (Backtracking)
+// Input:  (int) max data flow, (int) current visited neighborhood,
+//         (int) max data flow for a specific path, (set) visited neighborhoods,
+//         (list) list of data flow between two neighborhoods,
+//         (list) adjecency list of neighborhoods
+// Time Complexity: O(V*(V+E))
 void maxDataFlow(int &maxData, int currentNode, int lastNode, int currentMaxFlow, unordered_set<int> &visited, vector<vector<int>> &weights, unordered_map<int, vector<int>> &adjlist)
 {
     visited.insert(currentNode);
     if (currentNode == lastNode)
     {
+        // reaching the last neighborhood
         maxData = max(maxData, currentMaxFlow);
     }
     else
@@ -69,16 +197,20 @@ void maxDataFlow(int &maxData, int currentNode, int lastNode, int currentMaxFlow
         {
             if (visited.find(neighbour) == visited.end())
             {
+                // The max data flow of a path is limited by the slowest node in the network (Bottleneck)
                 int newMaxFlow = min(currentMaxFlow, weights[currentNode][neighbour]);
                 maxDataFlow(maxData, neighbour, lastNode, newMaxFlow, visited, weights, adjlist);
             }
         }
     }
+
+    // When reaching last visited Node, backtrack
     visited.erase(currentNode);
 }
 
 int main()
 {
+
     int n;
     cin >> n;
 
@@ -86,6 +218,7 @@ int main()
     vector<vector<int>> weights;
     unordered_map<int, vector<int>> adjlist;
 
+    // Reading distances between neighborhoods
     for (int i = 0; i < n; i++)
     {
         vector<int> row;
@@ -98,9 +231,9 @@ int main()
         graph.push_back(row);
     }
 
+    // Reading data flow between neighborhoods
     for (int i = 0; i < n; i++)
     {
-
         vector<int> row;
         for (int j = 0; j < n; j++)
         {
@@ -114,13 +247,12 @@ int main()
         weights.push_back(row);
     }
 
+    // THIRD QUESTION
     int maxData = 0;
     unordered_set<int> visited;
     maxDataFlow(maxData, 0, n - 1, INT_MAX, visited, weights, adjlist);
 
-    cout << maxData << endl;
-
-    // Cemtral mas cercana a nuevos nodos
+    // FOURTH QUESTION
     string str;
     int x, y;
     char sep;
@@ -128,7 +260,7 @@ int main()
     vector<Point> centrals;
     vector<Point> newCentrals;
 
-    // Ubicacion de centrales
+    // // Ubicacion de centrales existentes
     cin >> numberCentrals;
     for (int i = 0; i < numberCentrals; i++)
     {
@@ -141,7 +273,7 @@ int main()
         centrals.push_back(Point(x, y));
     }
 
-    // Nuevas centrales
+    // Ubicacion de nuevas centrales
     cin >> numberCentrals;
     for (int i = 0; i < numberCentrals; i++)
     {
@@ -154,12 +286,33 @@ int main()
         newCentrals.push_back(Point(x, y));
     }
 
-    // Calcular central mas cercana para cada nodo
+    // OUTPUT
+    cout << endl;
+    cout << "---PRINTING OUTPUT---" << endl;
+
+    // FIRST QUESTION
+    tspCable(graph);
+    cout << endl;
+
+    // SECOND QUESTION
+    tsp(graph);
+    cout << endl;
+
+    // THIRD QUESTION
+    cout << maxData << endl
+         << endl;
+
+    // FOURTH QUESTION
     for (int i = 0; i < newCentrals.size(); i++)
     {
         closestCentral(centrals, newCentrals[i]);
     }
 
+<<<<<<< HEAD
     // 0,0
     // 400,400
 }
+=======
+    return 0;
+}
+>>>>>>> 41f7d99 (Actividad integral 2 finished)

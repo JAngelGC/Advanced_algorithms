@@ -1,0 +1,14 @@
+* Carlos Eduardo Ruiz Lira / a01735706
+    - Lectura de input
+    - Ruta con el flujo maximo de informacion
+
+
+* Carlos Daniel Díaz Arrazate / a01734902
+    - Lectura de input
+    - Central mas cercana geograficamente a las nuevas centrales
+    - Ruta optima para cablear colonias
+
+
+* Jose Angel González Carrera / a01552274
+    - Lectura de input
+    - Ruta mas corta posible para visitar cada colonia una sola vez (TSP)
